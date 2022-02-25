@@ -1,26 +1,22 @@
 """
-Data Analytics II: PC1 Functions.
-
+Data Analytics II: PC1.
 Spring Semester 2021.
-
 University of St. Gallen.
+
+Jonas Husmann | 
+Niklas Leander Kampe | 16-611-618
 """
 
-# import modules here
 import sys
 import pandas as pd
 import numpy as np
 from scipy import stats
+import matplotlib.pyplot as plt
 
-# set pandas printing option to see all columns of the data
 pd.set_option('display.max_columns', 100)
-# and without breaking the dataframe into several lines
 pd.set_option('expand_frame_repr', False)
-# justify the headers for pandas dataframes
 pd.set_option('display.colheader_justify', 'right')
 
-
-# define an Output class for simultaneous console - file output
 class Output():
     """Output class for simultaneous console/file output."""
 
@@ -38,7 +34,6 @@ class Output():
         """Python 3 compatibility."""
 
 
-# own procedure for a balance check
 def balance_check(data, treatment, variables):
     """
     Check covariate balance.
@@ -184,3 +179,62 @@ def test_diff(means, serrors, nobs):
           round(result, 2), '-' * 80, '\n\n', sep='\n')
     # return the result
     return result
+
+# Part 1c)
+def summary_statistics(data):
+    """
+    Manually Compute Summary Statistics.
+
+    Parameters
+    ----------
+    data : TYPE: pd.DataFrame
+        DESCRIPTION: data including all variables
+
+    Returns
+    -------
+    Returns and Prints the Table of Manually Computed Summary Statistics
+    """
+    cols = data.columns
+    measures = ['Mean', 'Var', 'Std', 'Max', 'Min', 'Missing', 'Unique', 'Obs']
+    summary_stats = pd.DataFrame(index = measures, columns = cols)
+    for i in cols:
+        mean = round(data[i].mean(),2)
+        var = round(data[i].var(),2)
+        std = round(data[i].std(),2)
+        maximum = round(data[i].max(),2)
+        minimum = round(data[i].min(),2)
+        missing = data[i].isnull().sum()
+        unique = len(data[i].unique())
+        obs = len(data[i])
+        summary_stats[i] = [mean, var, std, maximum, minimum, missing, unique, obs]
+    print(summary_stats)
+    return summary_stats
+
+# Part 1e)
+def histogram(data):
+    """
+    Plot Continuous Variables.
+
+    Parameters
+    ----------
+    data : TYPE: pd.DataFrame
+        DESCRIPTION: data including all variables
+
+    Returns
+    -------
+    Plots and Saves all Histograms on Continuous Vairables
+    """
+    continous_var = ['age', 'ed', 're74', 're75', 're78']
+    for i in continous_var:
+        plt.hist(data[i])  
+        plt.title(i, size=14)
+        plt.ylabel('Count', size=12)
+        plt.xlabel('Value', size=12)
+        plt.show()
+        plt.savefig(f'Plots/histogram_{i}.png')
+    
+    
+    
+    
+    
+    
