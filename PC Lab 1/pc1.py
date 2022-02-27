@@ -28,14 +28,16 @@ DATANAME = 'data_pc1.csv'
 
 data = pd.read_csv(PATH + DATANAME)
 
+# Part 1a)
+print(round(data.head(n=5),2))
 # Part 1b)
 descriptive_stats = data.describe()
-print(descriptive_stats)
+print(round(descriptive_stats,2))
 # Part 1c)
 summary_stats = summary_statistics(data)
 # Part 1d)
 data.drop(columns = ['age2'], inplace=True)
-print(data.head(n=10))
+print(round(data.head(n=5),2))
 # Part 1e)
 histogram(data)
 # Part 1f)
