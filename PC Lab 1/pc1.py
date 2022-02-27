@@ -1,9 +1,9 @@
 """
 Data Analytics II: PC1.
-Spring Semester 2021.
+Spring Semester 2022.
 University of St. Gallen.
 
-Jonas Husmann | 
+Jonas Husmann | 16-610-917
 Niklas Leander Kampe | 16-611-618
 """
 
@@ -11,13 +11,15 @@ import sys
 import pandas as pd
 
 # Part 1a)
-PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 1/'
+PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 1/'
 sys.path.append(PATH)
 
 import pc1_functions as pc
 from pc1_functions import summary_statistics
 from pc1_functions import histogram
 from pc1_functions import balance_check
+from pc1_functions import ate_md
+from pc1_functions import OLS_regression
 
 OUTPUT_NAME = 'pc1_output'
 
@@ -45,6 +47,22 @@ data.dropna(axis=0, inplace=True)
 data.to_csv('data_pc1_cleaned')
 # Part 1g)
 balance_check(data, 'treat', data.columns[1:])
+
+# Part 2a)
+# creating the variables for outcome and treatment
+outcome = data['re78']
+treatment = data['treat']
+# using ate_md function
+ate_est = ate_md(outcome, treatment)
+
+# Part 2b)
+# Running the OLS regresion with all covariates
+X = data.drop(['re78'], axis = 1)
+OLS_reg = OLS_regression(outcome, X)
+
+# Only running the OLS without covariates to estimate ATE
+OLS_nocovariates = OLS_regression(outcome, treatment)
+
 
 sys.stdout.output.close()
 sys.stdout = orig_stdout

@@ -1,9 +1,9 @@
 """
 Data Analytics II: PC1.
-Spring Semester 2021.
+Spring Semester 2022.
 University of St. Gallen.
 
-Jonas Husmann | 
+Jonas Husmann | 16-610-917
 Niklas Leander Kampe | 16-611-618
 """
 
@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 
 pd.set_option('display.max_columns', 100)
 pd.set_option('expand_frame_repr', False)
@@ -233,6 +234,11 @@ def histogram(data):
         plt.savefig(f'Plots/histogram_{i}.png', format='png')
         plt.show()
     
+# Part 2b)
+def OLS_regression(Y, X):
+    X = sm.add_constant(X)
+    OLS_fit = sm.OLS(Y, X).fit()
+    print(OLS_fit.summary())
     
     
     
