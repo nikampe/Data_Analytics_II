@@ -11,7 +11,7 @@ import sys
 import pandas as pd
 
 # Part 1a)
-PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 1/'
+PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 1/'
 sys.path.append(PATH)
 
 import pc1_functions as pc
