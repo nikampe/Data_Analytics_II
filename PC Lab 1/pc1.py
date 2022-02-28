@@ -11,7 +11,7 @@ import sys
 import pandas as pd
 
 # Part 1a)
-PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 1/'
+PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 1/'
 sys.path.append(PATH)
 
 import pc1_functions as pc
@@ -50,18 +50,23 @@ balance_check(data, 'treat', data.columns[1:])
 
 # Part 2a)
 # creating the variables for outcome and treatment
-outcome = data['re78']
+outcome1 = data['re74']
+outcome2 = data['re75']
+outcome3 = data['re78']
+
 treatment = data['treat']
 # using ate_md function
-ate_est = ate_md(outcome, treatment)
+ate_est1 = ate_md(outcome1, treatment)
+ate_est2 = ate_md(outcome2, treatment)
+ate_est3 = ate_md(outcome3, treatment)
 
 # Part 2b)
 # Running the OLS regresion with all covariates
 X = data.drop(['re78'], axis = 1)
-OLS_reg = OLS_regression(outcome, X)
+OLS_reg = OLS_regression(outcome3, X)
 
 # Only running the OLS without covariates to estimate ATE
-OLS_nocovariates = OLS_regression(outcome, treatment)
+OLS_nocovariates = OLS_regression(outcome3, treatment)
 
 
 sys.stdout.output.close()
