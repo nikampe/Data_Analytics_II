@@ -80,7 +80,7 @@ Dep. Variable:                   re78   R-squared:                       0.052
 Model:                            OLS   Adj. R-squared:                  0.030
 Method:                 Least Squares   F-statistic:                     2.357
 Date:                Mon, 28 Feb 2022   Prob (F-statistic):             0.0134
-Time:                        21:22:55   Log-Likelihood:                -4082.4
+Time:                        21:26:49   Log-Likelihood:                -4082.4
 No. Observations:                 400   AIC:                             8185.
 Df Residuals:                     390   BIC:                             8225.
 Df Model:                           9                                         
@@ -115,7 +115,7 @@ Dep. Variable:                   re78   R-squared:                       0.014
 Model:                            OLS   Adj. R-squared:                  0.011
 Method:                 Least Squares   F-statistic:                     5.605
 Date:                Mon, 28 Feb 2022   Prob (F-statistic):             0.0184
-Time:                        21:22:55   Log-Likelihood:                -4090.2
+Time:                        21:26:49   Log-Likelihood:                -4090.2
 No. Observations:                 400   AIC:                             8184.
 Df Residuals:                     398   BIC:                             8192.
 Df Model:                           1                                         
