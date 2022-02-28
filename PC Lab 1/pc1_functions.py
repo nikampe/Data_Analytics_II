@@ -231,7 +231,7 @@ def histogram(data):
         plt.title(i, size=14)
         plt.ylabel('Count', size=12)
         plt.xlabel('Value', size=12)
-        plt.savefig(f'Plots/histogram_{i}.png', format='png')
+        plt.savefig(f'histogram_{i}.png', format='png')
         plt.show()
     
 # Part 2b)
