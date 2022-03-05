@@ -11,6 +11,7 @@ Niklas Leander Kampe | 16-611-618
 
 import sys
 import pandas as pd
+pd.set_option('display.max_columns', None)
 
 # Part 1a)
 PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
@@ -29,6 +30,8 @@ sys.stdout = pc.Output(path=PATH, name=OUTPUT_NAME)
 DATANAME = 'data_pc2.csv'
 data = pd.read_csv(PATH + DATANAME)
 
+# Part 1a)
+print(round(data.head(n=5),2))
 # Part 1b)
 summary_stats = summary_statistics(data)
 continuous_variables = ['bweight', 'mage', 'medu', 'nprenatal', 'monthslb']
@@ -37,6 +40,7 @@ histogram(data, continuous_variables)
 data.drop(columns = ['msmoke', 'monthslb'], inplace = True)
 for col in ['order', 'prenatal']:
     data = data[data[col].notna()]
+print(round(data.head(n=5),2))
 # Part 1d)
 for i in data.index:
     for col in ['order', 'prenatal']:
@@ -44,6 +48,7 @@ for i in data.index:
            data.loc[i, col] = 1
         else:
             data.loc[i, col] = 0
+print(round(data.head(n=5),2))
 # Part 1e)
 summary_stats = summary_statistics(data)
 data.to_csv('data_pc2_cleaned')
