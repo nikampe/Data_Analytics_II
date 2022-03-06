@@ -103,3 +103,94 @@ bweight  3158.39  3421.86   -263.47  22.09 -11.92   0.0   -47.66
 --------------------------------------------------------------------------------
 
 
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                bweight   R-squared:                       0.032
+Model:                            OLS   Adj. R-squared:                  0.032
+Method:                 Least Squares   F-statistic:                     135.1
+Date:                Sun, 06 Mar 2022   Prob (F-statistic):           9.25e-31
+Time:                        17:06:19   Log-Likelihood:                -31837.
+No. Observations:                4110   AIC:                         6.368e+04
+Df Residuals:                    4108   BIC:                         6.369e+04
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const       3421.8571      9.649    354.634      0.000    3402.940    3440.774
+mbsmoke     -263.4665     22.663    -11.625      0.000    -307.899    -219.034
+==============================================================================
+Omnibus:                      611.507   Durbin-Watson:                   2.010
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1888.267
+Skew:                          -0.767   Prob(JB):                         0.00
+Kurtosis:                       5.945   Cond. No.                         2.70
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                bweight   R-squared:                       0.101
+Model:                            OLS   Adj. R-squared:                  0.099
+Method:                 Least Squares   F-statistic:                     45.95
+Date:                Sun, 06 Mar 2022   Prob (F-statistic):           2.09e-87
+Time:                        17:06:19   Log-Likelihood:                -31685.
+No. Observations:                4110   AIC:                         6.339e+04
+Df Residuals:                    4099   BIC:                         6.346e+04
+Df Model:                          10                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const       2890.2864     58.541     49.372      0.000    2775.515    3005.058
+mhisp        -38.9036     47.640     -0.817      0.414    -132.304      54.496
+alcohol        5.6572     50.680      0.112      0.911     -93.703     105.017
+deadkids     -20.0072     19.692     -1.016      0.310     -58.615      18.600
+mage           1.8674      1.818      1.027      0.304      -1.698       5.432
+medu           4.4178      3.832      1.153      0.249      -3.096      11.931
+nprenatal     29.8877      2.737     10.922      0.000      24.523      35.253
+order        -88.9802     18.440     -4.825      0.000    -125.132     -52.828
+mbsmoke     -237.5201     22.823    -10.407      0.000    -282.267    -192.774
+mrace        255.4881     24.892     10.264      0.000     206.687     304.289
+prenatal     -95.0657     24.951     -3.810      0.000    -143.983     -46.149
+==============================================================================
+Omnibus:                      470.714   Durbin-Watson:                   2.026
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1253.221
+Skew:                          -0.638   Prob(JB):                    7.35e-273
+Kurtosis:                       5.385   Cond. No.                         230.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                bweight   R-squared:                       0.078
+Model:                            OLS   Adj. R-squared:                  0.076
+Method:                 Least Squares   F-statistic:                     43.17
+Date:                Sun, 06 Mar 2022   Prob (F-statistic):           6.76e-67
+Time:                        17:06:19   Log-Likelihood:                -31737.
+No. Observations:                4110   AIC:                         6.349e+04
+Df Residuals:                    4101   BIC:                         6.355e+04
+Df Model:                           8                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const       2958.3326     57.844     51.143      0.000    2844.927    3071.738
+alcohol      -34.4070     51.162     -0.673      0.501    -134.712      65.898
+deadkids     -37.9500     19.852     -1.912      0.056     -76.871       0.970
+mage           3.7289      1.828      2.039      0.041       0.144       7.314
+medu           7.2060      3.851      1.871      0.061      -0.344      14.756
+nprenatal     33.2018      2.751     12.067      0.000      27.808      38.596
+order        -79.7073     18.624     -4.280      0.000    -116.221     -43.194
+mbsmoke     -226.6595     23.026     -9.844      0.000    -271.803    -181.516
+prenatal     -62.8143     25.028     -2.510      0.012    -111.883     -13.745
+==============================================================================
+Omnibus:                      512.947   Durbin-Watson:                   2.027
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1377.483
+Skew:                          -0.689   Prob(JB):                    7.65e-300
+Kurtosis:                       5.479   Cond. No.                         219.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

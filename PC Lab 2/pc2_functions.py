@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
-
+import statsmodels.api as sm
 
 class Output():
     """Output class for simultaneous console/file output."""
@@ -209,3 +209,9 @@ def histogram(data, variables):
         plt.xlabel('Value', size=12)
         plt.savefig(f'histogram_{i}.png', format='png')
         plt.show()
+        
+# Part 2a and b)
+def OLS_regression(Y, X):
+    X = sm.add_constant(X)
+    OLS_fit = sm.OLS(Y, X).fit()
+    print(OLS_fit.summary())

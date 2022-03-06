@@ -14,13 +14,14 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 # Part 1a)
-PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
+PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
 sys.path.append(PATH)
 
 import pc2_functions as pc
 from pc2_functions import summary_statistics
 from pc2_functions import histogram
 from pc2_functions import balance_check
+from pc2_functions import OLS_regression
 
 OUTPUT_NAME = 'pc2_output'
 
@@ -55,6 +56,24 @@ data.to_csv('data_pc2_cleaned')
 # Part 1f)
 balance_check(data, 'mbsmoke', data.drop(columns = ['mbsmoke', 'bweight']).columns)
 balance_check(data, 'mbsmoke', ['bweight'])
+
+# Part 2a)
+#defining the variables
+X = data['mbsmoke']
+Y = data['bweight']
+#running the OLS regression
+OLS_reg = OLS_regression(Y, X)
+
+# Part 2b)
+#checking correlations
+cor = pd.DataFrame(round(data.corr(),3))
+print(cor)
+# defining the variables
+X = data.drop(['bweight', 'mhisp', 'mrace'], axis = 1)
+Y = data['bweight']
+#running the OLS regression
+OLS_reg2 = OLS_regression(Y, X)
+
 
 # close the output file
 sys.stdout.output.close()
