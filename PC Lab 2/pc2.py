@@ -14,7 +14,7 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 # Part 1a)
-PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
+PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
 sys.path.append(PATH)
 
 import pc2_functions as pc
