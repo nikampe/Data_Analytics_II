@@ -14,7 +14,7 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 # Part 1a)
-PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
+PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 2/'
 sys.path.append(PATH)
 
 import pc2_functions as pc
@@ -58,24 +58,23 @@ balance_check(data, 'mbsmoke', data.drop(columns = ['mbsmoke', 'bweight']).colum
 balance_check(data, 'mbsmoke', ['bweight'])
 
 # Part 2a)
-#defining the variables
+## defining the variables
 X = data['mbsmoke']
 Y = data['bweight']
 #running the OLS regression
 OLS_reg = OLS_regression(Y, X)
 
 # Part 2b)
-#checking correlations
+## checking correlations
 cor = pd.DataFrame(round(data.corr(),3))
 print(cor)
-# defining the variables
+## defining the variables
 X = data.drop(['bweight', 'mhisp', 'mrace'], axis = 1)
 Y = data['bweight']
-#running the OLS regression
+## running the OLS regression
 OLS_reg2 = OLS_regression(Y, X)
 
 
-# close the output file
 sys.stdout.output.close()
 sys.stdout = orig_stdout
 
