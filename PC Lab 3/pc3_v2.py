@@ -16,10 +16,10 @@ import pandas as pd
 PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 3/'
 sys.path.append(PATH)
 
-import pc3_functions as pc
-from pc3_functions import my_summary_stats
-from pc3_functions import regression_tree_root_node
-from pc3_functions import sse_opt_regression_tree
+import pc3_functions_v2 as pc
+from pc3_functions_v2 import my_summary_stats
+from pc3_functions_v2 import regression_tree_root_node
+from pc3_functions_v2 import sse_opt_regression_tree
 OUTPUT_NAME = 'pc3_output'
 
 orig_stdout = sys.stdout
