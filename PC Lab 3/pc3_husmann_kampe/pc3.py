@@ -16,10 +16,10 @@ import pandas as pd
 PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 3/'
 sys.path.append(PATH)
 
-import pc3_functions_v2 as pc
-from pc3_functions_v2 import my_summary_stats
-from pc3_functions_v2 import regression_tree_root_node
-from pc3_functions_v2 import sse_opt_regression_tree
+import pc3_functions as pc
+from pc3_functions import my_summary_stats
+from pc3_functions import regression_tree_root_node
+from pc3_functions import sse_opt_regression_tree
 OUTPUT_NAME = 'pc3_output'
 
 orig_stdout = sys.stdout
@@ -34,10 +34,9 @@ summary_stats = my_summary_stats(data)
 # Part 1b)
 regression_tree_root_node(data, 'X', 'Y')
 # Part 1c)
-# first sorting the data in increasing order according to X and reset the indices 
-data_sort = data.sort_values(by=['X'],ignore_index=True)
-# running the function to find best splitting X / its row index / and optimal SSE
-sse_opt_regression_tree(data, 'X', 'Y', 1, 10)
+data_sort = data.sort_values(by = ['X'])
+data_sort.reset_index(drop = True, inplace = True)
+sse_opt_regression_tree(data_sort, 'X', 'Y', 1, 10)
 
 sys.stdout.output.close()
 sys.stdout = orig_stdout

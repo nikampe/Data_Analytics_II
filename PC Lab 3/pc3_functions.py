@@ -12,6 +12,9 @@ import sys
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import export_text
+from sklearn import metrics
 
 # define an Output class for simultaneous console - file output
 class Output():
@@ -75,8 +78,12 @@ def sse_mse(y_test, y_pred):
     Returns the SSE and MSE accuracy metrics.
     """
     sse = 0
+    # print(y_test.shape, y_pred.shape)
+    # print(y_test)
     for i in y_test:
+        # print(i)
         dev = (i - y_pred)**2
+        # break
         sse = sse + dev
     mse = sse/len(y_test)
     return sse, mse
@@ -113,5 +120,47 @@ def regression_tree_root_node(df, X, Y):
     print('\nPredictive Regression Tree: Root Node Only', '-' * 80,
           f'Predicted Y: {round(y_pred, 2)}',
           f'SSE: {round(sse, 2)}',
-          f'MSE: {round(mse, 2)}', '-' * 80, sep='\n')
+          f'MSE: {round(mse, 2)}', '-' * 80, '\n', sep='\n')
     return mse
+
+def sse_opt_regression_tree (df, X, Y, min_observations, maxdepth):
+    """
+    SSE optimizing regression tree: Predict the outcome Y with the covariate X.
+    Required min_observations in leaves and setting depth = maxdepth
+    Prints the bet-spliiting value of X and its row index
+    Returns MSE
+    """    
+    df_X = df[[X]]
+    df_y = df[[Y]]
+    y = df[[Y]]
+    y = y.astype('float')
+
+    # Train/Test Split
+    X_train, X_test, y_train, y_test = train_test_split(df_X, df_y, train_size = 0.8, random_state = 23)
+    
+    # setting up the model
+    regression = DecisionTreeRegressor(criterion="mse", splitter = "best", max_depth = maxdepth, min_samples_leaf = min_observations)
+    regression = regression.fit(X_train,y_train)
+    y_pred = regression.predict(X_test)
+    
+    # finding best splitting value of X
+    tree_r = export_text(regression, feature_names = list(X_train.columns), decimals = 8)
+    X_bestsplitval = float(tree_r.split("X <= ", 1)[1].rstrip().split("\n|", 5)[0])
+    
+    # Row index of best splitting X
+    X_index = X_test.sub(X_bestsplitval).abs().values.argmin()
+
+    # Calculate SSE and MSE
+    y_test = y_test['Y'].to_numpy()
+    sse, mse = sse_mse(y_test, y_pred)
+
+    # Print results
+    print('SSE Optimizing Regression Tree', '-' * 80,
+          f'Best splitting value of covariate X: {round(X_bestsplitval, 4)}',
+          f'Row Index of X: {round(X_index, 4)}',
+          f'SSE: {round(sse[X_index], 4)}', 
+          f'MSE: {round(mse[X_index], 4)}', 
+          '-' * 80, sep='\n')
+    return mse
+    
+    
