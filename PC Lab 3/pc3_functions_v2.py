@@ -120,7 +120,7 @@ def regression_tree_root_node(df, X, Y):
     print('\nPredictive Regression Tree: Root Node Only', '-' * 80,
           f'Predicted Y: {round(y_pred, 2)}',
           f'SSE: {round(sse, 2)}',
-          f'MSE: {round(mse, 2)}', '-' * 80, sep='\n')
+          f'MSE: {round(mse, 2)}', '-' * 80, '\n', sep='\n')
     return mse
 
 def sse_opt_regression_tree (df, X, Y, min_observations, maxdepth):
@@ -148,18 +148,19 @@ def sse_opt_regression_tree (df, X, Y, min_observations, maxdepth):
     X_bestsplitval = float(tree_r.split("X <= ", 1)[1].rstrip().split("\n|", 1)[0])
     
     # Row index of best splitting X
-    X_index = df['X'].sub(X_bestsplitval).abs().values.argmin()
+    X_index = X_test.sub(X_bestsplitval).abs().values.argmin()
 
     # Calculate SSE and MSE
-    y_test = y_test['Y'].tolist()
-    #sse, mse = sse_mse(y_test, y_pred)
+    y_test = y_test['Y'].to_numpy()
+    sse, mse = sse_mse(y_test, y_pred)
 
     #Print results
     print('SSE Optimizing Regression Tree', '-' * 80,
           f'Best splitting value of covariate X: {round(X_bestsplitval,4)}',
           f'Row Index of X: {round(X_index, 4)}',
-          #f'MSE: {round(mse[X_index], 4)}', 
+          f'SSE: {round(sse[X_index], 4)}', 
+          f'MSE: {round(mse[X_index], 4)}', 
           '-' * 80, sep='\n')
-    #return mse
+    return mse
     
     
