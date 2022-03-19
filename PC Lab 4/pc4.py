@@ -1,46 +1,54 @@
 """
 Data Analytics II: PC4.
-
-Spring Semester 2021.
-
+Spring Semester 2022.
 University of St. Gallen.
+
+Jonas Husmann | 16-610-917
+Niklas Leander Kampe | 16-611-618
 """
 
 # Data Analytics II: PC Project 4
 
-# import modules
 import sys
 import pandas as pd
+import matplotlib.pyplot as plt
+pd.set_option('display.max_columns', None)
 
-# set working directory
-PATH = 'Q:/SEW/Lechner/Veranstaltungen/FS21/DA2/PClabs/PC4/'
+# Part 1a)
+PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 4/'
 sys.path.append(PATH)
 
-# load own functions
 import pc4_functions as pc
+from pc4_functions import summary_statistics
+from pc4_functions import histogram, histogram_change
+from pc4_functions import dummy_check
+from pc4_functions import table, table_combined
 
-# define the name for the output file
 OUTPUT_NAME = 'pc4_output'
 
-# save the console output in parallel to a txt file
 orig_stdout = sys.stdout
 sys.stdout = pc.Output(path=PATH, name=OUTPUT_NAME)
 
-# define data name
 DATANAME = 'data_pc4.csv'
-
-# load in data using pandas
 data = pd.read_csv(PATH + DATANAME)
 
-# your solutions start here
-# --------------------------------------------------------------------------- #
+# Part 1a)
+print(round(data.head(n = 5), 2))
+# Part 1b)
+summary_statistics(data)
+# Part 1c)
+histogram(data, "fte", ["year", "state"], bins = 30)
+histogram_change(data, "fte", ["year", "state"], bins = 30)
+# Part 1d)
+dummy_check(data, ["southj", "centralj", "northj", "pa1", "pa2"])
+# Part 1e)
+table(data, ['fte', 'wage_st', 'hrsopen', 'price'], ['year', 'state'])
+table_combined(data, ['fte', 'wage_st', 'hrsopen', 'price'], ['year', 'state'])
+# Part 1f)
+for i in data.index:
+    data.loc[i,'chain'] = 1 if data.loc[i, 'chain'] == 1 else 0
+    data.loc[i, 'year'] = 1 if data.loc[i, 'year'] == 93 else 0
+print(round(data.head(n = 5), 2))
 
-
-# --------------------------------------------------------------------------- #
-# your solutions end here
-
-# close the output file
 sys.stdout.output.close()
 sys.stdout = orig_stdout
-
-# end of the PC 4 Session #

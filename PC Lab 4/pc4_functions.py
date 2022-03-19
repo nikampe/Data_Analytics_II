@@ -1,18 +1,19 @@
 """
-Data Analytics II: PC4 Functions.
-
-Spring Semester 2021.
-
+Data Analytics II: PC4.
+Spring Semester 2022.
 University of St. Gallen.
+
+Jonas Husmann | 16-610-917
+Niklas Leander Kampe | 16-611-618
 """
 
-# import modules
 import sys
 import pandas as pd
 import matplotlib.pyplot as plot
+import numpy as np
+import statsmodels as stats
+import matplotlib.pyplot as plt
 
-
-# define an Output class for simultaneous console - file output
 class Output():
     """Output class for simultaneous console/file output."""
 
@@ -29,11 +30,7 @@ class Output():
     def flush(self):
         """Python 3 compatibility."""
 
-
-# write a function to produce summary stats:
-# mean, variance, standard deviation, maximum and minimum,
-# the number of missings and unique values
-def my_summary_stats(data):
+def summary_statistics(data):
     """
     Summary stats: mean, variance, standard deviation, maximum and minimum.
 
@@ -46,28 +43,20 @@ def my_summary_stats(data):
     -------
     None. Prints descriptive table od the data
     """
-    # generate storage for the stats as an empty dictionary
     my_descriptives = {}
-    # loop over columns
     for col_id in data.columns:
-        # fill in the dictionary with descriptive values by assigning the
-        # column ids as keys for the dictionary
-        my_descriptives[col_id] = [data[col_id].mean(),                  # mean
-                                   data[col_id].var(),               # variance
-                                   data[col_id].std(),                # st.dev.
-                                   data[col_id].max(),                # maximum
-                                   data[col_id].min(),                # minimum
-                                   sum(data[col_id].isna()),          # missing
-                                   len(data[col_id].unique())]  # unique values
-    # convert the dictionary to dataframe for a nicer output and name rows
-    # pandas dataframe will automatically take the keys as columns if the
-    # data input is a dictionary. Transpose for having the stats as columns
+        my_descriptives[col_id] = [data[col_id].mean(),
+                                   data[col_id].var(),               
+                                   data[col_id].std(),                
+                                   data[col_id].max(),                
+                                   data[col_id].min(),                
+                                   sum(data[col_id].isna()),          
+                                   len(data[col_id].unique())]   
     my_descriptives = pd.DataFrame(my_descriptives,
                                    index=["mean", "var", "std", "max",
                                           "min", "na", "unique"]).transpose()
-    # print the descriptives, (\n inserts a line break)
-    print('Descriptive Statistics:', '-' * 80,
-          round(my_descriptives, 2), '-' * 80, '\n\n', sep='\n')
+    print('\nDescriptive Statistics:', '-' * 80,
+          round(my_descriptives, 2), '-' * 80, sep='\n')
 
 
 # own procedure to do histograms
@@ -153,3 +142,149 @@ def ate_md(outcome, treatment):
           round(result, 2), '-' * 80, '\n\n', sep='\n')
     # return the resulting dataframe too
     return result
+
+def histogram(data, variable, filter_variables, bins = 10):
+    """
+    Plot Continuous Variables.
+
+    Parameters
+    ----------
+    data : TYPE: pd.DataFrame
+        DESCRIPTION: data including all variables
+    variable : TYPE: String
+        DESCRIPTION: target variable
+    filter_variables : TYPE: n.array/list
+        DESCRIPTION: variables to be filtered on
+    bins : TYPE: int
+        DESCRIPTION: bins for the histogrm bar width 
+
+    Returns
+    -------
+    Plots and Saves all Histograms
+    """
+    filter_values_1 = data[filter_variables[0]].unique()
+    filter_values_2 = data[filter_variables[1]].unique()
+    for i in filter_values_1:
+        for j in filter_values_2:
+            plt.hist(data[(data[filter_variables[0]] == i) & (data[filter_variables[1]] == j)][variable], bins = bins)  
+            plt.title(f"{variable} for {filter_variables[0]}={i} and {filter_variables[1]}={j}", size = 14)
+            plt.ylabel('Count', size = 12)
+            plt.xlabel('Value', size = 12)
+            plt.savefig(f'histogram_{variable}_{i}_{j}.png', format='png')
+            plt.show()
+            
+def histogram_change(data, variable, filter_variables, bins = 10):
+    """
+    Plot Continuous Variables.
+
+    Parameters
+    ----------
+    variable : TYPE: String
+        DESCRIPTION: target variable
+    filter_variables : TYPE: n.array/list
+        DESCRIPTION: variables to be filtered on
+    bins : TYPE: int
+        DESCRIPTION: bins for the histogrm bar width 
+
+    Returns
+    -------
+    Plots and Saves all Histograms
+    """
+    filter_values_1 = data[filter_variables[0]].unique()
+    filter_values_2 = data[filter_variables[1]].unique()
+    for i in filter_values_2:
+        plt.hist(data[(data[filter_variables[1]] == i) & (data[filter_variables[0]] == filter_values_1[0])][variable].to_numpy() - data[(data[filter_variables[1]] == i) & (data[filter_variables[0]] == filter_values_1[1])][variable].to_numpy(), bins = 30) 
+        plt.title(f"Change in {variable} for {filter_variables[1]}={i} from 19{filter_values_1[0]} to 19={filter_values_1[1]}", size = 14)
+        plt.ylabel('Count', size = 12)
+        plt.xlabel('Value', size = 12)
+        plt.savefig(f'histogram_{variable}_change_{i}_{filter_values_1[0]}_{filter_values_1[1]}.png', format='png')
+        plt.show()
+        
+def dummy_check(data, variables):
+    """
+    Plot Continuous Variables.
+
+    Parameters
+    ----------
+    data : TYPE: pd.DataFrame
+        DESCRIPTION: data including all variables
+    variable : TYPE: String
+        DESCRIPTION: target variable
+
+    Returns
+    -------
+    Returns a prints a table with fundamental checks for correct dummy variable specifications
+    """
+    overview = pd.DataFrame(index = variables, columns = ['Unique', 'Max', 'Min', '|', 'Check'])
+    for i in variables:
+        overview.loc[i, 'Unique'] = len(data[i].unique())
+        overview.loc[i, 'Min'] = data[i].min()
+        overview.loc[i, 'Max'] = data[i].max()
+        overview.loc[i, '|'] = '|'
+        if (overview.loc[i, 'Unique'] <= 2) & (overview.loc[i, 'Min'] >= 0) & (overview.loc[i, 'Max'] <= 1):
+            overview.loc[i, 'Check'] = 'OK'
+        else:
+            overview.loc[i, 'Check'] = 'CHECK'
+    print('\nDummy Variable Check:', '-' * 80, round(overview, 2), '-' * 80, sep = '\n')
+    return overview   
+
+def table(data, variables, filter_variables):
+    """
+    Plot Continuous Variables.
+
+    Parameters
+    ----------
+    variables: TYPE: np.array/list
+        DESCRIPTION: target variables
+    filter_variables : TYPE: n.array/list
+        DESCRIPTION: variables to be filtered on
+
+    Returns
+    -------
+    Returns and prints a table with means and numbers of observations for target variables conditioned on filter variables
+    """
+    filter_values_1 = data[filter_variables[0]].unique()
+    filter_values_2 = data[filter_variables[1]].unique()
+    overview = pd.DataFrame(index = variables, columns = [f'Mean (year={filter_values_1[0]})', f'Mean (year={filter_values_1[1]})', f'Mean (state={filter_values_2[0]})', f'Mean (state={filter_values_2[1]})', f'Obs (year={filter_values_1[0]})', f'Obs (year={filter_values_1[1]})', f'Obs (state={filter_values_2[0]})', f'Obs (state={filter_values_2[1]})'])
+    for variable in variables:
+        for i in np.concatenate((filter_values_1, filter_values_2)):
+            if i in filter_values_1:
+                mean = data[data[filter_variables[0]] == i][variable].mean()
+                obs = len(data[data[filter_variables[0]] == i][variable])
+                overview.loc[variable, f'Mean (year={i})'] = mean
+                overview.loc[variable, f'Obs (year={i})'] = obs
+            elif i in filter_values_2:
+                mean = data[data[filter_variables[1]] == i][variable].mean()
+                obs = len(data[data[filter_variables[1]] == i][variable])
+                overview.loc[variable, f'Mean (state={i})'] = mean
+                overview.loc[variable, f'Obs (state={i})'] = obs
+    print('\nMeans & Numbers of Observations:', '-' * 80, round(overview, 2), '-' * 80, sep = '\n')
+    return overview  
+
+def table_combined(data, variables, filter_variables):
+    """
+    Plot Continuous Variables.
+
+    Parameters
+    ----------
+    variables: TYPE: np.array/list
+        DESCRIPTION: target variables
+    filter_variables : TYPE: n.array/list
+        DESCRIPTION: variables to be filtered on
+
+    Returns
+    -------
+    Returns and prints a table with means and numbers of observations for target variables combinedly conditioned on filter variables
+    """
+    filter_values_1 = data[filter_variables[0]].unique()
+    filter_values_2 = data[filter_variables[1]].unique()
+    overview = pd.DataFrame(index = variables, columns = [f'Mean (year={filter_values_1[0]}, state={filter_values_2[0]})', f'Mean (year={filter_values_1[0]}, state={filter_values_2[1]})', f'Mean (year={filter_values_1[1]}, state={filter_values_2[0]})', f'Mean (year={filter_values_1[1]}, state={filter_values_2[1]})', f'Obs (year={filter_values_1[0]}, state={filter_values_2[0]})', f'Obs (year={filter_values_1[0]}, state={filter_values_2[1]})', f'Obs (year={filter_values_1[1]}, state={filter_values_2[0]})', f'Obs (year={filter_values_1[1]}, state={filter_values_2[1]})'])
+    for variable in variables:
+        for i in filter_values_1:
+            for j in filter_values_2:
+                mean = data[(data[filter_variables[0]] == i) & (data[filter_variables[1]] == j)][variable].mean()
+                obs = len(data[(data[filter_variables[0]] == i) & (data[filter_variables[1]] == j)][variable])
+                overview.loc[variable, f'Mean (year={i}, state={j})'] = mean
+                overview.loc[variable, f'Obs (year={i}, state={j})'] = obs
+    print('\nMeans & Numbers of Observations (Combined):', '-' * 80, round(overview, 2), '-' * 80, sep = '\n')
+    return overview  
