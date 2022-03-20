@@ -7,12 +7,20 @@ Jonas Husmann | 16-610-917
 Niklas Leander Kampe | 16-611-618
 """
 
+# import sys
+# import pandas as pd
+# import matplotlib.pyplot as plot
+# import numpy as np
+# import statsmodels.api as stats
+# import matplotlib.pyplot as plt
+
 import sys
 import pandas as pd
-import matplotlib.pyplot as plot
 import numpy as np
-import statsmodels as stats
+from scipy import stats
+#import matplotlib.pyplot as plot
 import matplotlib.pyplot as plt
+
 
 class Output():
     """Output class for simultaneous console/file output."""
@@ -85,20 +93,20 @@ def my_hist(data, varname, path, nbins=10, label=""):
     data[varname].plot.hist(grid=True, bins=nbins, rwidth=0.9, color='grey')
     # add title
     if label == "":
-        plot.title('Histogram of ' + varname)
+        plt.title('Histogram of ' + varname)
     else:
-        plot.title('Histogram of ' + varname + ' for ' + label)
+        plt.title('Histogram of ' + varname + ' for ' + label)
     # add labels
-    plot.xlabel(varname)
-    plot.ylabel('Counts')
-    plot.grid(axis='y', alpha=0.75)
+    plt.xlabel(varname)
+    plt.ylabel('Counts')
+    plt.grid(axis='y', alpha=0.75)
     # save the plot
     if label == "":
-        plot.savefig(path + '/histogram_of_' + varname + '.png')
+        plt.savefig(path + '/histogram_of_' + varname + '.png')
     else:
-        plot.savefig(path + '/histogram_of_' + varname + '_' + label + '.png')
+        plt.savefig(path + '/histogram_of_' + varname + '_' + label + '.png')
     # print the plot
-    plot.show()
+    plt.show()
 
 # ATE estimation by mean differences
 def ate_md(outcome, treatment):
@@ -141,7 +149,8 @@ def ate_md(outcome, treatment):
           'Dependent Variable: ' + outcome.name, '-' * 80,
           round(result, 2), '-' * 80, '\n\n', sep='\n')
     # return the resulting dataframe too
-    return result
+    return 
+
 
 def histogram(data, column, group_columns, bins = 30):
     """
