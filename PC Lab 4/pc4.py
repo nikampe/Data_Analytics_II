@@ -22,7 +22,7 @@ import pc4_functions as pc
 from pc4_functions import summary_statistics
 from pc4_functions import histogram, histogram_change
 from pc4_functions import dummy_check
-from pc4_functions import table, table_combined
+from pc4_functions import table_mean_obs
 
 OUTPUT_NAME = 'pc4_output'
 
@@ -40,14 +40,16 @@ summary_statistics(data)
 histogram(data, "fte", ["year", "state"], bins = 30)
 histogram_change(data, "fte", ["year", "state"], bins = 30)
 # Part 1d)
-dummy_check(data, ["southj", "centralj", "northj", "pa1", "pa2"])
+# dummy_check(data, ["southj", "centralj", "northj", "pa1", "pa2"])
+dummy_check(data, ["southj", "centralj", "northj"], 1)
+dummy_check(data, ["pa1", "pa2"], 0)
 # Part 1e)
-table(data, ['fte', 'wage_st', 'hrsopen', 'price'], ['year', 'state'])
-table_combined(data, ['fte', 'wage_st', 'hrsopen', 'price'], ['year', 'state'])
+table_mean_obs(data, ['year', 'state'],[ 'fte', 'wage_st','hrsopen', 'price'])
 # Part 1f)
 for i in data.index:
-    data.loc[i,'chain'] = 1 if data.loc[i, 'chain'] == 1 else 0
     data.loc[i, 'year'] = 1 if data.loc[i, 'year'] == 93 else 0
+data = pd.get_dummies(data, columns = ["chain"])
+data.rename(columns={'chain_1': 'Burgerking', 'chain_2': 'KFC', 'chain_3': 'Royrogers', 'chain_4': 'Wendys'}, inplace = True)
 print(round(data.head(n = 5), 2))
 
 sys.stdout.output.close()

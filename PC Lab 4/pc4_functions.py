@@ -143,7 +143,7 @@ def ate_md(outcome, treatment):
     # return the resulting dataframe too
     return result
 
-def histogram(data, variable, filter_variables, bins = 10):
+def histogram(data, column, group_columns, bins = 30):
     """
     Plot Continuous Variables.
 
@@ -151,27 +151,20 @@ def histogram(data, variable, filter_variables, bins = 10):
     ----------
     data : TYPE: pd.DataFrame
         DESCRIPTION: data including all variables
-    variable : TYPE: String
-        DESCRIPTION: target variable
-    filter_variables : TYPE: n.array/list
-        DESCRIPTION: variables to be filtered on
-    bins : TYPE: int
-        DESCRIPTION: bins for the histogrm bar width 
+    column : TYPE: String
+        DESCRIPTION: target vairable for plotting
+    group_columns : TYPE: np.array/list
+        DESCRIPTION: columns to be grouped by
 
     Returns
     -------
     Plots and Saves all Histograms
     """
-    filter_values_1 = data[filter_variables[0]].unique()
-    filter_values_2 = data[filter_variables[1]].unique()
-    for i in filter_values_1:
-        for j in filter_values_2:
-            plt.hist(data[(data[filter_variables[0]] == i) & (data[filter_variables[1]] == j)][variable], bins = bins)  
-            plt.title(f"{variable} for {filter_variables[0]}={i} and {filter_variables[1]}={j}", size = 14)
-            plt.ylabel('Count', size = 12)
-            plt.xlabel('Value', size = 12)
-            plt.savefig(f'histogram_{variable}_{i}_{j}.png', format='png')
-            plt.show()
+    for group_col in group_columns:
+        data.hist(column = column, by = group_col, bins = bins)
+        plt.suptitle(f'{column} by {group_col}')
+        plt.savefig(f'histogram_{column}_by_{group_col}.png', format='png')
+        plt.show()
             
 def histogram_change(data, variable, filter_variables, bins = 10):
     """
@@ -194,13 +187,13 @@ def histogram_change(data, variable, filter_variables, bins = 10):
     filter_values_2 = data[filter_variables[1]].unique()
     for i in filter_values_2:
         plt.hist(data[(data[filter_variables[1]] == i) & (data[filter_variables[0]] == filter_values_1[0])][variable].to_numpy() - data[(data[filter_variables[1]] == i) & (data[filter_variables[0]] == filter_values_1[1])][variable].to_numpy(), bins = 30) 
-        plt.title(f"Change in {variable} for {filter_variables[1]}={i} from 19{filter_values_1[0]} to 19={filter_values_1[1]}", size = 14)
+        plt.title(f"Change in {variable} for {filter_variables[1]}={i} from 19{filter_values_1[0]} to 19{filter_values_1[1]}", size = 14)
         plt.ylabel('Count', size = 12)
         plt.xlabel('Value', size = 12)
         plt.savefig(f'histogram_{variable}_change_{i}_{filter_values_1[0]}_{filter_values_1[1]}.png', format='png')
         plt.show()
         
-def dummy_check(data, variables):
+def dummy_check(data, variables, filter_value):
     """
     Plot Continuous Variables.
 
@@ -215,76 +208,17 @@ def dummy_check(data, variables):
     -------
     Returns a prints a table with fundamental checks for correct dummy variable specifications
     """
-    overview = pd.DataFrame(index = variables, columns = ['Unique', 'Max', 'Min', '|', 'Check'])
+    overview = pd.DataFrame(index = variables, columns = ['Share', 'Sum'])
     for i in variables:
-        overview.loc[i, 'Unique'] = len(data[i].unique())
-        overview.loc[i, 'Min'] = data[i].min()
-        overview.loc[i, 'Max'] = data[i].max()
-        overview.loc[i, '|'] = '|'
-        if (overview.loc[i, 'Unique'] <= 2) & (overview.loc[i, 'Min'] >= 0) & (overview.loc[i, 'Max'] <= 1):
-            overview.loc[i, 'Check'] = 'OK'
-        else:
-            overview.loc[i, 'Check'] = 'CHECK'
+        if filter_value == 0:
+            filtered_data = data[data['state'] == 0]
+        elif filter_value == 1:
+            filtered_data = data[data['state'] == 1]
+        overview.loc[i, 'Share'] = round(len(filtered_data[filtered_data[i] == 1])/len(filtered_data), 4)
+        overview.loc[i, 'Sum'] = overview.loc[:i, 'Share'].sum()
     print('\nDummy Variable Check:', '-' * 80, round(overview, 2), '-' * 80, sep = '\n')
     return overview   
 
-def table(data, variables, filter_variables):
-    """
-    Plot Continuous Variables.
-
-    Parameters
-    ----------
-    variables: TYPE: np.array/list
-        DESCRIPTION: target variables
-    filter_variables : TYPE: n.array/list
-        DESCRIPTION: variables to be filtered on
-
-    Returns
-    -------
-    Returns and prints a table with means and numbers of observations for target variables conditioned on filter variables
-    """
-    filter_values_1 = data[filter_variables[0]].unique()
-    filter_values_2 = data[filter_variables[1]].unique()
-    overview = pd.DataFrame(index = variables, columns = [f'Mean (year={filter_values_1[0]})', f'Mean (year={filter_values_1[1]})', f'Mean (state={filter_values_2[0]})', f'Mean (state={filter_values_2[1]})', f'Obs (year={filter_values_1[0]})', f'Obs (year={filter_values_1[1]})', f'Obs (state={filter_values_2[0]})', f'Obs (state={filter_values_2[1]})'])
-    for variable in variables:
-        for i in np.concatenate((filter_values_1, filter_values_2)):
-            if i in filter_values_1:
-                mean = data[data[filter_variables[0]] == i][variable].mean()
-                obs = len(data[data[filter_variables[0]] == i][variable])
-                overview.loc[variable, f'Mean (year={i})'] = mean
-                overview.loc[variable, f'Obs (year={i})'] = obs
-            elif i in filter_values_2:
-                mean = data[data[filter_variables[1]] == i][variable].mean()
-                obs = len(data[data[filter_variables[1]] == i][variable])
-                overview.loc[variable, f'Mean (state={i})'] = mean
-                overview.loc[variable, f'Obs (state={i})'] = obs
-    print('\nMeans & Numbers of Observations:', '-' * 80, round(overview, 2), '-' * 80, sep = '\n')
-    return overview  
-
-def table_combined(data, variables, filter_variables):
-    """
-    Plot Continuous Variables.
-
-    Parameters
-    ----------
-    variables: TYPE: np.array/list
-        DESCRIPTION: target variables
-    filter_variables : TYPE: n.array/list
-        DESCRIPTION: variables to be filtered on
-
-    Returns
-    -------
-    Returns and prints a table with means and numbers of observations for target variables combinedly conditioned on filter variables
-    """
-    filter_values_1 = data[filter_variables[0]].unique()
-    filter_values_2 = data[filter_variables[1]].unique()
-    overview = pd.DataFrame(index = variables, columns = [f'Mean (year={filter_values_1[0]}, state={filter_values_2[0]})', f'Mean (year={filter_values_1[0]}, state={filter_values_2[1]})', f'Mean (year={filter_values_1[1]}, state={filter_values_2[0]})', f'Mean (year={filter_values_1[1]}, state={filter_values_2[1]})', f'Obs (year={filter_values_1[0]}, state={filter_values_2[0]})', f'Obs (year={filter_values_1[0]}, state={filter_values_2[1]})', f'Obs (year={filter_values_1[1]}, state={filter_values_2[0]})', f'Obs (year={filter_values_1[1]}, state={filter_values_2[1]})'])
-    for variable in variables:
-        for i in filter_values_1:
-            for j in filter_values_2:
-                mean = data[(data[filter_variables[0]] == i) & (data[filter_variables[1]] == j)][variable].mean()
-                obs = len(data[(data[filter_variables[0]] == i) & (data[filter_variables[1]] == j)][variable])
-                overview.loc[variable, f'Mean (year={i}, state={j})'] = mean
-                overview.loc[variable, f'Obs (year={i}, state={j})'] = obs
-    print('\nMeans & Numbers of Observations (Combined):', '-' * 80, round(overview, 2), '-' * 80, sep = '\n')
-    return overview  
+def table_mean_obs(data, groups, covariates):
+    overview = data.groupby(groups)[covariates].agg(['mean', 'count'])
+    print('\nMeans & Observations:', '-' * 80, round(overview, 4), '-' * 80, sep = '\n')
