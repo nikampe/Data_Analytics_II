@@ -1,3 +1,4 @@
+
 """
 Data Analytics II: PC4.
 Spring Semester 2022.
@@ -11,7 +12,6 @@ Niklas Leander Kampe | 16-611-618
 
 import sys
 import pandas as pd
-import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', None)
 
 # Part 1a)
