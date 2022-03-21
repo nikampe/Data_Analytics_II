@@ -7,18 +7,10 @@ Jonas Husmann | 16-610-917
 Niklas Leander Kampe | 16-611-618
 """
 
-# import sys
-# import pandas as pd
-# import matplotlib.pyplot as plot
-# import numpy as np
-# import statsmodels.api as stats
-# import matplotlib.pyplot as plt
-
 import sys
 import pandas as pd
 import numpy as np
 from scipy import stats
-#import matplotlib.pyplot as plot
 import matplotlib.pyplot as plt
 
 

@@ -15,7 +15,7 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 # Part 1a)
-PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 4/'
+PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 4/'
 sys.path.append(PATH)
 
 import pc4_functions as pc
@@ -53,10 +53,10 @@ data = pd.get_dummies(data, columns = ["chain"])
 data.rename(columns={'chain_1': 'Burgerking', 'chain_2': 'KFC', 'chain_3': 'Royrogers', 'chain_4': 'Wendys'}, inplace = True)
 print(round(data.head(n = 5), 2))
 # Part 2a)
-data_1993 = data[data.year == 1] #making sure that only data after policy change is used
+data_1993 = data[data.year == 1] # making sure that only data after policy change is used
 ate_md(data_1993['fte'],data_1993['state'])
 # Part 2b)
-data_NJ = data[data.state == 1] #making sure that only data for NJ is used
+data_NJ = data[data.state == 1] # making sure that only data for NJ is used
 ate_md(data_NJ['fte'],data_NJ['year'])
 
 sys.stdout.output.close()
