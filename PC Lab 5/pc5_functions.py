@@ -202,3 +202,57 @@ def cross_table(data, columns):
     """
     ct = pd.crosstab(data[columns[0]], data[columns[1]])
     print('\nCross Table:', '-' * 80, round(ct, 4), '-' * 80, sep = '\n')
+    
+    
+def TSLS(exog, endog, instrument, outcome, intercept=True, display=True):
+    """
+    Two Stage Least Squares regression
+
+    Parameters
+    ----------
+    exog : TYPE: pd.DataFrame
+        DESCRIPTION: covariates
+    endog : TYPE: pd.DataFrame
+        DESCRIPTION: covariates
+    instrument : TYPE: pd.DataFrame
+        DESCRIPTION: instrument for endog variable
+    outcome : TYPE: pd.Series
+        DESCRIPTION: outcome
+    intercept : TYPE: boolean
+        DESCRIPTION: should intercept be included? The default is True.
+    display : TYPE: boolean
+        DESCRIPTION: should results be displayed? The default is True.
+
+    Returns
+    -------
+    result: Two stage least squares regression results with standard errors
+    """
+    if intercept:
+        exog1 = pd.concat([pd.Series(np.ones(len(exog)), index=exog.index,
+                                    name='intercept'), exog, instrument], axis=1)
+    else:
+        exog1 = pd.concat([exog, instrument], axis=1)
+    x_inv1 = np.linalg.inv(np.dot(exog1.T, exog1))
+    betas1 = np.dot(x_inv1, np.dot(exog1.T, endog))
+    prediction1 = pd.Series(np.dot(exog1, betas1))
+    if intercept:
+        exog2 = pd.concat([pd.Series(np.ones(len(exog)), index=exog.index,
+                                    name='intercept'), exog, prediction1], axis=1)
+    else:
+        exog2 = pd.concat([exog, prediction1], axis=1)
+    x_inv2 = np.linalg.inv(np.dot(exog2.T, exog2))
+    betas2 = np.dot(x_inv2, np.dot(exog2.T, outcome))
+    res = outcome - np.dot(exog2, betas2)
+    s_e = np.sqrt(np.diagonal(np.dot(np.dot(res.T, res), x_inv2) /
+                              (exog2.shape[0] - exog2.shape[1])))
+    tval = betas2 / s_e
+    pval = stats.t.sf(np.abs(tval),
+                      (exog2.shape[0] - exog2.shape[1])) * 2
+    result = pd.DataFrame([betas2, s_e, tval, pval],
+                          index=['coef', 'se', 't-value', 'p-value'],
+                          columns=list(exog2.columns.values)).transpose()
+    if display:
+        print('OLS Estimation Results:', '-' * 80,
+              'Dependent Variable: ' + outcome.name, '-' * 80,
+              round(result, 2), '-' * 80, '\n\n', sep='\n')
+    return result

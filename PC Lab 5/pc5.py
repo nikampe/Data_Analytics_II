@@ -12,8 +12,9 @@ Niklas Leander Kampe | 16-611-618
 import sys
 import pandas as pd
 
-# Prt 1a)
-PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 5/'
+
+# Part 1a)
+PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 5/'
 sys.path.append(PATH)
 
 import pc5_functions as pc
@@ -21,6 +22,8 @@ from pc5_functions import summary_statistics
 from pc5_functions import histogram
 from pc5_functions import table_mean_obs
 from pc5_functions import cross_table
+from pc5_functions import my_ols
+from pc5_functions import TSLS
 
 OUTPUT_NAME = 'pc5_output'
 
@@ -39,6 +42,18 @@ histogram(data, ['kidcount', 'weeks_work'], bins = 30)
 table_mean_obs(data, ['kidcount'], ['employed'])
 # Part 1d)
 cross_table(data, ['morekids', 'multi2nd'])
+# Part 2a)
+exog = ['morekids', 'black', 'hisp', 'age_mother', 'hsgrad', 'colgrad']
+ols1 = my_ols(data[exog], #exog
+              data['weeks_work']) #outcome
+# Part 2b)
+exog = ['black', 'hisp', 'age_mother', 'hsgrad', 'colgrad']
+TSLS1 = TSLS(data[exog], #exog
+             data['morekids'], #endog
+             data['multi2nd'], #instrument
+             data['weeks_work'] #outcome
+             )
+
 
 
 sys.stdout.output.close()
