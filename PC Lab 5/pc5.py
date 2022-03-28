@@ -14,7 +14,7 @@ import pandas as pd
 
 
 # Part 1a)
-PATH = '/Users/jonashusmann/Documents/GitHub/Data_Analytics_II/PC Lab 5/'
+PATH = '/Users/niklaskampe/Documents/GitHub/Data_Analytics_II/PC Lab 5/'
 sys.path.append(PATH)
 
 import pc5_functions as pc
@@ -23,7 +23,7 @@ from pc5_functions import histogram
 from pc5_functions import table_mean_obs
 from pc5_functions import cross_table
 from pc5_functions import my_ols
-from pc5_functions import TSLS
+from pc5_functions import my_tsls
 
 OUTPUT_NAME = 'pc5_output'
 
@@ -44,17 +44,13 @@ table_mean_obs(data, ['kidcount'], ['employed'])
 cross_table(data, ['morekids', 'multi2nd'])
 # Part 2a)
 exog = ['morekids', 'black', 'hisp', 'age_mother', 'hsgrad', 'colgrad']
-ols1 = my_ols(data[exog], #exog
+ols = my_ols(data[exog], #exog
               data['weeks_work']) #outcome
 # Part 2b)
-exog = ['black', 'hisp', 'age_mother', 'hsgrad', 'colgrad']
-TSLS1 = TSLS(data[exog], #exog
+tsls = my_tsls(data[['black', 'hisp', 'age_mother', 'hsgrad', 'colgrad']], #exog
              data['morekids'], #endog
              data['multi2nd'], #instrument
-             data['weeks_work'] #outcome
-             )
-
-
+             data['weeks_work']) #outcome
 
 sys.stdout.output.close()
 sys.stdout = orig_stdout
